@@ -1,6 +1,6 @@
 package com.eximias.demo.service;
 
-import com.eximias.demo.customer.CustomerDTO;
+import com.eximias.demo.dto.CustomerDTO;
 import com.eximias.demo.entity.Customer;
 import com.eximias.demo.exception.NotFoundException;
 import com.eximias.demo.repository.CustomerRepository;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class CustomerService {
     private final CustomerRepository customerRepository;
 
-    public void create(CustomerDTO dto) {
-        customerRepository.save(toEntity(dto));
+    public int create(CustomerDTO dto) {
+        return customerRepository.save(convertToEntity(dto)).getId();
     }
 
-    public Customer toEntity(CustomerDTO dto) {
+    public Customer convertToEntity(CustomerDTO dto) {
         Customer customer = new Customer();
         customer.setName(dto.getName());
         customer.setAge(dto.getAge());
@@ -28,11 +28,20 @@ public class CustomerService {
         return customer;
     }
 
-    public List<CustomerDTO> findAll() {
-        return toDto(customerRepository.findAll());
+    public Customer convertToEntityBelongToOrder(CustomerDTO dto){
+        Customer customer = new Customer();
+        customer.setId(dto.getId());
+        customer.setName(dto.getName());
+        customer.setAge(dto.getAge());
+        customer.setAddress(dto.getAddress());
+        return customer;
     }
 
-    public CustomerDTO toDto(Customer customer) {
+    public List<CustomerDTO> findAll() {
+        return convertToDto(customerRepository.findAll());
+    }
+
+    public CustomerDTO convertToDto(Customer customer) {
         CustomerDTO customerDto = new CustomerDTO();
         customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
@@ -41,10 +50,10 @@ public class CustomerService {
         return customerDto;
     }
 
-    public List<CustomerDTO> toDto(List<Customer> customers) {
+    public List<CustomerDTO> convertToDto(List<Customer> customers) {
         return customers
                 .stream()
-                .map(this::toDto)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -54,19 +63,21 @@ public class CustomerService {
     }
 
     public void deleteById(int id) {
-        customerRepository.deleteById(id);
-
+        Optional<Customer> customer = customerRepository.findById(id);
+        if(customer.isPresent()){
+            customerRepository.deleteById(id);
+        }
     }
 
     public CustomerDTO update(int id, CustomerDTO customerDto) {
         return findEntity(id)
-                .map(entity -> toEntity(customerDto, entity))
+                .map(entity -> convertToEntity(customerDto, entity))
                 .map(customerRepository::save)
-                .map(this::toDto)
+                .map(this::convertToDto)
                 .get();
     }
 
-    private Customer toEntity(CustomerDTO dto, Customer entity) {
+    private Customer convertToEntity(CustomerDTO dto, Customer entity) {
         entity.setName(dto.getName());
         entity.setAge(dto.getAge());
         entity.setAddress(dto.getAddress());

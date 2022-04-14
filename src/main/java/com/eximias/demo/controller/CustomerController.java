@@ -1,6 +1,6 @@
 package com.eximias.demo.controller;
 
-import com.eximias.demo.customer.CustomerDTO;
+import com.eximias.demo.dto.CustomerDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +16,8 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody CustomerDTO dto) {
-        customerService.create(dto);
+    public int create(@RequestBody CustomerDTO dto) {
+        return customerService.create(dto);
     }
 
     @GetMapping

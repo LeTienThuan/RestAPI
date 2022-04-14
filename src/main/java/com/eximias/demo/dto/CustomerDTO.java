@@ -1,4 +1,4 @@
-package com.eximias.demo.customer;
+package com.eximias.demo.dto;
 
 import lombok.Data;
 
