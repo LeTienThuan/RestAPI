@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "OrderProduct")
-public class OrderProduct {
+@Table(name = "Orders")
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,7 +22,7 @@ public class OrderProduct {
 
     private String deliveryAddress;
 
-    public OrderProduct() {
+    public Orders() {
 
     }
 }

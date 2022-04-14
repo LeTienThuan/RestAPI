@@ -1,7 +1,7 @@
 package com.eximias.demo.service;
 
 import com.eximias.demo.dto.OrderDTO;
-import com.eximias.demo.entity.OrderProduct;
+import com.eximias.demo.entity.Orders;
 import com.eximias.demo.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ public class OrderService {
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
 
-    public OrderProduct convertToEntity(OrderDTO orderDto){
-        OrderProduct order = new OrderProduct();
+    public Orders convertToEntity(OrderDTO orderDto){
+        Orders order = new Orders();
         order.setCustomer(customerService.convertToEntityBelongToOrder(orderDto.getCustomer()));
         order.setDeliveryAddress(orderDto.getDeliveryAddress());
         order.setOrderDetail(orderDetailService.convertToEntity(orderDto.getOrderDetail()));
