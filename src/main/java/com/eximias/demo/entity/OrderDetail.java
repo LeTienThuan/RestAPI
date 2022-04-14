@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
+@Entity
 @Table(name = "OrderDetail")
 public class OrderDetail {
     @Id
@@ -14,7 +15,7 @@ public class OrderDetail {
     private int id;
 
     @ManyToOne
-    private Order order;
+    private OrderProduct orders;
 
     private int product;
     private int quantity;
