@@ -28,8 +28,9 @@ public class OrderController {
     }
 
     @PutMapping(path = "/{id}")
-    public void update(@PathVariable(name = "id") int id, @RequestBody OrderDTO orderDto) {
-        orderService.update(id, orderDto);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Orders update(@PathVariable(name = "id") int id, @RequestBody OrderDTO orderDto) {
+        return orderService.update(id, orderDto);
     }
 
     @DeleteMapping(path = "/{id}")

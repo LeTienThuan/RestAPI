@@ -35,6 +35,14 @@ public class OrderService {
         return ordersDto;
     }
 
+    public Orders convertToEntity(OrderDTO orderDto,  Orders order){
+        orderDetailService.deleteByOrderId(order);
+        order.setCustomer(customerService.convertToEntityBelongToOrder(orderDto.getCustomer()));
+        order.setDeliveryAddress(orderDto.getDeliveryAddress());
+        order.setOrderDetail(orderDetailService.convertToEntity(orderDto.getOrderDetail(), order));
+        return order;
+    }
+
 
     public int create() {
         return orderRepository.save(new Orders()).getId();
@@ -44,17 +52,15 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    public void update(int id, OrderDTO orderDto) {
-        Optional<Orders> order = orderRepository.findById(id);
-        if(order.isPresent()){
-            Orders realOrder = order.get();
-            orderDetailService.deleteByOrderId(realOrder);
-            realOrder.setCustomer(customerService.convertToEntityBelongToOrder(orderDto.getCustomer()));
-            realOrder.setDeliveryAddress(orderDto.getDeliveryAddress());
-            realOrder.setOrderDetail(orderDetailService.convertToEntity(orderDto.getOrderDetail(), realOrder));
-            orderRepository.save(realOrder);
+    public Orders update(int id, OrderDTO orderDto) {
+        Optional<Orders> unknownOrder = orderRepository.findById(id);
+        if(unknownOrder.isPresent()){
+            Orders order = convertToEntity(orderDto, unknownOrder.get());
+            orderRepository.save(order);
+            return order;
+        }else{
+            return null;
         }
-
     }
 
     public List<OrderDTO> findAll() {
