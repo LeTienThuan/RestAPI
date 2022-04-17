@@ -16,17 +16,5 @@ public class Customer {
     private String name;
     private int age;
     private String address;
-
-    @OneToMany(mappedBy = "")
-    List<Orders> ordersList;
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", address='" + address + '\'' +
-                '}';
-    }
 }
 

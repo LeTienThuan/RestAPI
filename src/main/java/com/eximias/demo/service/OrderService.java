@@ -18,7 +18,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
-    private final OrderDetailRepository orderDetailRepository;
 
     public OrderDTO convertToDto(Orders order){
         OrderDTO orderDto = new OrderDTO();
@@ -49,6 +48,7 @@ public class OrderService {
         Optional<Orders> order = orderRepository.findById(id);
         if(order.isPresent()){
             Orders realOrder = order.get();
+            orderDetailService.deleteByOrderId(realOrder);
             realOrder.setCustomer(customerService.convertToEntityBelongToOrder(orderDto.getCustomer()));
             realOrder.setDeliveryAddress(orderDto.getDeliveryAddress());
             realOrder.setOrderDetail(orderDetailService.convertToEntity(orderDto.getOrderDetail(), realOrder));

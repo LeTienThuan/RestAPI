@@ -3,6 +3,7 @@ package com.eximias.demo.service;
 import com.eximias.demo.dto.OrderDetailDTO;
 import com.eximias.demo.entity.OrderDetail;
 import com.eximias.demo.entity.Orders;
+import com.eximias.demo.repository.OrderDetailRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class OrderDetailService {
+    private final OrderDetailRepository orderDetailRepository;
 
     public OrderDetail convertToEntity(OrderDetailDTO orderDetailDto, Orders order) {
         OrderDetail orderDetail = new OrderDetail();
@@ -20,7 +22,6 @@ public class OrderDetailService {
         orderDetail.setQuantity(orderDetailDto.getQuantity());
         orderDetail.setPrice(orderDetailDto.getPrice());
         orderDetail.setTotal(orderDetailDto.getTotal());
-        System.out.println(orderDetail);
         return orderDetail;
     }
 
@@ -48,5 +49,8 @@ public class OrderDetailService {
             orderDetailsDto.add(convertToDto(orderDetail));
         }
         return orderDetailsDto;
+    }
+    public void deleteByOrderId(Orders order){
+        orderDetailRepository.deleteByOrderId(order);
     }
 }

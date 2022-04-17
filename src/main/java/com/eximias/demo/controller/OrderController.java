@@ -29,7 +29,6 @@ public class OrderController {
 
     @PutMapping(path = "/{id}")
     public void update(@PathVariable(name = "id") int id, @RequestBody OrderDTO orderDto) {
-        System.out.println(id + " " +orderDto);
         orderService.update(id, orderDto);
     }
 
