@@ -1,5 +1,4 @@
 package com.eximias.demo.entity;
-import com.eximias.demo.entity.Orders;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

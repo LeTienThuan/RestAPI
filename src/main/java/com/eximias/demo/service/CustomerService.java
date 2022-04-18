@@ -7,54 +7,24 @@ import com.eximias.demo.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import com.eximias.demo.mapper.CustomerMapper;
 
 @Service
 @AllArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
     public int create(CustomerDTO dto) {
-        return customerRepository.save(convertToEntity(dto)).getId();
-    }
-
-    public Customer convertToEntity(CustomerDTO dto) {
-        Customer customer = new Customer();
-        customer.setName(dto.getName());
-        customer.setAge(dto.getAge());
-        customer.setAddress(dto.getAddress());
-        return customer;
-    }
-
-    public Customer convertToEntityBelongToOrder(CustomerDTO dto){
-        Customer customer = new Customer();
-        customer.setId(dto.getId());
-        customer.setName(dto.getName());
-        customer.setAge(dto.getAge());
-        customer.setAddress(dto.getAddress());
-        return customer;
+        return customerRepository.save(customerMapper.convertToEntity(dto)).getId();
     }
 
     public List<CustomerDTO> findAll() {
-        return convertToDto(customerRepository.findAll());
-    }
-
-    public CustomerDTO convertToDto(Customer customer) {
-        CustomerDTO customerDto = new CustomerDTO();
-        customerDto.setId(customer.getId());
-        customerDto.setName(customer.getName());
-        customerDto.setAge(customer.getAge());
-        customerDto.setAddress(customer.getAddress());
-        return customerDto;
-    }
-
-    public List<CustomerDTO> convertToDto(List<Customer> customers) {
-        return customers
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return customerMapper.convertToDto(customerRepository.findAll());
     }
 
     public Optional<Customer> findEntity(int id) {
@@ -64,23 +34,14 @@ public class CustomerService {
 
     public void deleteById(int id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        if(customer.isPresent()){
+        if (customer.isPresent()) {
             customerRepository.deleteById(id);
         }
     }
 
     public CustomerDTO update(int id, CustomerDTO customerDto) {
-        return findEntity(id)
-                .map(entity -> convertToEntity(customerDto, entity))
-                .map(customerRepository::save)
-                .map(this::convertToDto)
-                .get();
-    }
-
-    private Customer convertToEntity(CustomerDTO dto, Customer entity) {
-        entity.setName(dto.getName());
-        entity.setAge(dto.getAge());
-        entity.setAddress(dto.getAddress());
-        return entity;
+        Customer updatedCustomer = customerMapper.convertToEntity(findEntity(id).get(), customerDto);
+        customerRepository.save(updatedCustomer);
+        return customerMapper.convertToDto(updatedCustomer);
     }
 }
