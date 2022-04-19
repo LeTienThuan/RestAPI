@@ -1,7 +1,10 @@
 package com.eximias.demo.controller;
 
 import com.eximias.demo.dto.OrderDTO;
+import com.eximias.demo.dto.OrderDetailDTO;
+import com.eximias.demo.entity.OrderDetail;
 import com.eximias.demo.entity.Orders;
+import com.eximias.demo.service.OrderDetailService;
 import com.eximias.demo.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import java.util.List;
 @RequestMapping(path = "/order")
 public class OrderController {
     private final OrderService orderService;
+    private final OrderDetailService orderDetailService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -29,7 +33,8 @@ public class OrderController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Orders update(@PathVariable(name = "id") int id, @RequestBody OrderDTO orderDto) {
+    public OrderDTO
+    update(@PathVariable(name = "id") int id, @RequestBody OrderDTO orderDto) {
         return orderService.update(id, orderDto);
     }
 
@@ -38,4 +43,9 @@ public class OrderController {
     public void delete(@PathVariable(name = "id") int id) {
         orderService.delete(id);
     }
+
+    @DeleteMapping("/find/{id}")
+    public void deleteById(@PathVariable(name = "id") int id){orderDetailService.deleteById(id);}
+
 }
+

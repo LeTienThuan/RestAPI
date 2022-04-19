@@ -17,7 +17,7 @@ public class Orders {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetail;
 
     private String deliveryAddress;
@@ -25,4 +25,5 @@ public class Orders {
     public Orders() {
 
     }
+
 }
