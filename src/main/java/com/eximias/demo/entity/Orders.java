@@ -2,11 +2,13 @@ package com.eximias.demo.entity;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "Orders")
 public class Orders {
@@ -20,10 +22,6 @@ public class Orders {
     @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetail;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String deliveryAddress;
-
-    public Orders() {
-
-    }
-
 }
